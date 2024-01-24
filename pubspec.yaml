@@ -1,14 +1,14 @@
 name: tinode
-description: This SDK implements Tinode client-side protocol for multi platform applications based on dart. 
+description: This SDK implements Tinode client-side protocol for multi platform applications based on dart.
 version: 1.0.0-alpha.4
 homepage: https://tinode.co/
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   rxdart: ^0.27.1
-  web_socket_channel: ^2.1.0
+  web_socket_channel: ^2.4.3
   get_it: ^7.1.3
 
 dev_dependencies:
