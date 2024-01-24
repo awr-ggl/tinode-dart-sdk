@@ -153,7 +153,8 @@ class Tinode {
 
     _onConnectedSubscription ??= _connectionService.onOpen.listen((_) {
       _futureManager.checkExpiredFutures();
-      onConnected.add(null);
+      onConnected.add(true);
+      onDisconnect.add(false);
     });
 
     _onDisconnectedSubscription ??= _connectionService.onDisconnect.listen((_) {
@@ -181,7 +182,8 @@ class Tinode {
       }
       return MapEntry(key, value);
     });
-    onDisconnect.add(null);
+    onDisconnect.add(true);
+    onConnected.add(false);
   }
 
   /// Handler for newly received messages from server
