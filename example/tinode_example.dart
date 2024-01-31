@@ -27,7 +27,7 @@ void main(List<String> args) async {
   var grp = tinode.getTopic('grpeTeKuPsh0Vw');
   grp.onData.listen((value) {
     if (value != null) {
-      print('DataMessage: ' + value.content);
+      print('DataMessage: ' + value.content.toString());
     }
   });
 
