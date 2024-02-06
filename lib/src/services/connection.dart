@@ -73,8 +73,8 @@ class ConnectionService {
   /// Close current websocket connection
   void disconnect() {
     _connecting = false;
-    _ws?.close(status.goingAway);
-    onDisconnect.add(null);
+    _ws!.close(status.goingAway);
+    onDisconnect.add(false);
   }
 
   /// Send network probe to check if connection is indeed live
