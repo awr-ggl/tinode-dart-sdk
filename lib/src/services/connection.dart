@@ -51,8 +51,10 @@ class ConnectionService {
       _loggerService.warn('Reconnecting...');
     }
     _connecting = true;
+
     _ws = await WebSocket.connect(Tools.makeBaseURL(_options))
-        .timeout(Duration(milliseconds: 5000));
+        .timeout(Duration(seconds: 10));
+    _ws!.pingInterval = Duration(seconds: 5);
     _connecting = false;
     _loggerService.log('Connected.');
     _channel = IOWebSocketChannel(_ws!);
