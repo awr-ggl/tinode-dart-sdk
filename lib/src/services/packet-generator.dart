@@ -58,7 +58,6 @@ class PacketGenerator {
       case packet_types.Leave:
         packetData = LeavePacketData(
           topic: topicName,
-          unsub: false,
         );
         break;
 
