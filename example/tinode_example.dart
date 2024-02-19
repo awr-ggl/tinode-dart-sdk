@@ -22,6 +22,11 @@ void main(List<String> args) async {
           item.unread.toString());
     }
   });
+
+  // me.onData.listen((value) {
+  //   print('data on topic me');
+  // });
+
   await me.subscribe(MetaGetBuilder(me).withLaterSub(null).build(), null);
 
   var grp = tinode.getTopic('grpeTeKuPsh0Vw');
