@@ -16,7 +16,9 @@ class LoggerService {
 
   void log(String value) {
     if (_configService.loggerEnabled == true) {
-      print('LOG: ' + value);
+      if (value.contains('out:')) {
+        print('LOG: ' + value);
+      }
     }
   }
 

@@ -100,8 +100,13 @@ class Tinode {
   /// `onMessage` event will be triggered when a message is received
   PublishSubject<ServerMessage> onMessage = PublishSubject<ServerMessage>();
 
-  /// `onRawMessage` event will be triggered when a message is received value will be a json
-  PublishSubject<String> onRawMessage = PublishSubject<String>();
+  /// `onRawResponse` event will be triggered when a message is received value will be a json
+  PublishSubject<String> onRawResponse = PublishSubject<String>();
+  PublishSubject<String> onRawData = PublishSubject<String>();
+  PublishSubject<String> onRawCtrl = PublishSubject<String>();
+  PublishSubject<String> onRawPres = PublishSubject<String>();
+  PublishSubject<String> onRawInfo = PublishSubject<String>();
+  PublishSubject<String> onRawMeta = PublishSubject<String>();
 
   /// Creates an instance of Tinode interface to interact with tinode server using websocket
   ///
@@ -193,8 +198,28 @@ class Tinode {
     }
     _loggerService.log('in: ' + input);
 
-    // Send raw message to listener
-    onRawMessage.add(input);
+    // Send raw response to listener
+    onRawResponse.add(input);
+
+    // TODO BEGINNING CUSTOM LISTENER
+    try {
+      var responseWSTinode = jsonDecode(input);
+      // Send raw response type data to listener
+      if (responseWSTinode['data'] != null) {
+        onRawData.add(input);
+      } else if (responseWSTinode['meta'] != null) {
+        onRawMeta.add(input);
+      } else if (responseWSTinode['ctrl'] != null) {
+        onRawCtrl.add(input);
+      } else if (responseWSTinode['pres'] != null) {
+        onRawPres.add(input);
+      } else if (responseWSTinode['info'] != null) {
+        onRawInfo.add(input);
+      }
+    } catch (e) {
+      print(
+          'ERROR ON DECODE DATA STRING TO JSON FROM TINODE SERVER RESPONSE - ${e.toString()}');
+    }
 
     if (input == '0') {
       onNetworkProbe.add(null);
