@@ -108,8 +108,14 @@ class Tinode {
 
   /// on raw ctrl
   PublishSubject<String> onRawCtrl = PublishSubject<String>();
+
+  /// on raw pres
   PublishSubject<String> onRawPres = PublishSubject<String>();
+
+  /// on raw info
   PublishSubject<String> onRawInfo = PublishSubject<String>();
+
+  /// on raw meta
   PublishSubject<String> onRawMeta = PublishSubject<String>();
 
   /// Creates an instance of Tinode interface to interact with tinode server using websocket
