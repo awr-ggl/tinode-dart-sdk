@@ -102,7 +102,11 @@ class Tinode {
 
   /// `onRawResponse` event will be triggered when a message is received value will be a json
   PublishSubject<String> onRawResponse = PublishSubject<String>();
+
+  /// on raw data
   PublishSubject<String> onRawData = PublishSubject<String>();
+
+  /// on raw ctrl
   PublishSubject<String> onRawCtrl = PublishSubject<String>();
   PublishSubject<String> onRawPres = PublishSubject<String>();
   PublishSubject<String> onRawInfo = PublishSubject<String>();
