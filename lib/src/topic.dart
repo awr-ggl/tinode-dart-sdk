@@ -1046,6 +1046,7 @@ class Topic {
 
   /// Calculate ranges of missing messages
   void _updateDeletedRanges() {
+    return;
     var ranges = <DataMessage>[];
     DataMessage prev;
 
