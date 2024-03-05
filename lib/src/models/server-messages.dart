@@ -88,7 +88,15 @@ class MetaMessage {
   /// Latest applicable 'delete' transaction
   final DeleteTransaction? del;
 
-  MetaMessage({this.id, this.topic, this.ts, this.desc, this.sub, this.tags, this.cred, this.del});
+  MetaMessage(
+      {this.id,
+      this.topic,
+      this.ts,
+      this.desc,
+      this.sub,
+      this.tags,
+      this.cred,
+      this.del});
 
   static MetaMessage fromMessage(Map<String, dynamic> msg) {
     List<dynamic>? sub = msg['sub'];
@@ -97,13 +105,21 @@ class MetaMessage {
       id: msg['id'],
       topic: msg['topic'],
       ts: msg['ts'],
-      desc: msg['desc'] != null ? TopicDescription.fromMessage(msg['desc']) : null,
-      sub: sub != null && sub.length != null ? sub.map((sub) => TopicSubscription.fromMessage(sub)).toList() : [],
+      desc: msg['desc'] != null
+          ? TopicDescription.fromMessage(msg['desc'])
+          : null,
+      sub: sub != null && sub.length != null
+          ? sub.map((sub) => TopicSubscription.fromMessage(sub)).toList()
+          : [],
       tags: msg['tags']?.cast<String>(),
       cred: msg['cred'] != null && msg['cred'].length > 0
-          ? msg['cred'].map((dynamic cred) => Credential.fromMessage(cred)).toList().cast<Credential>()
+          ? msg['cred']
+              .map((dynamic cred) => Credential.fromMessage(cred))
+              .toList()
+              .cast<Credential>()
           : [],
-      del: msg['del'] != null ? DeleteTransaction.fromMessage(msg['del']) : null,
+      del:
+          msg['del'] != null ? DeleteTransaction.fromMessage(msg['del']) : null,
     );
   }
 }
@@ -210,8 +226,9 @@ class PresMessage {
       what: msg['what'],
       seq: msg['seq'],
       clear: msg['clear'],
-      delseq:
-          msg['delseq'] != null && msg['delseq'].length != null ? msg['delseq'].map((seq) => DeleteTransactionRange.fromMessage(seq)).toList() : [],
+      // delseq:
+      //     msg['delseq'] != null && msg['delseq'].length != null ? msg['delseq'].map((seq) => DeleteTransactionRange.fromMessage(seq)).toList() : [],
+      delseq: msg['delseq'] != null && msg['delseq'].length != null ? [] : [],
       ua: msg['ua'],
       act: msg['act'],
       tgt: msg['tgt'],

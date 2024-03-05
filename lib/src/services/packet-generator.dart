@@ -114,6 +114,7 @@ class PacketGenerator {
         packetData = null as dynamic;
     }
 
-    return Packet(type, packetData, Tools.getNextUniqueId());
+    return Packet(type, packetData,
+        packetData is NotePacketData ? null : Tools.getNextUniqueId());
   }
 }
