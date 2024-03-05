@@ -29,7 +29,8 @@ const int OWNER = 0x80;
 const int INVALID = 0x100000;
 
 /// Bitmask for validating access modes
-const int AccessModePermissionsBITMASK = JOIN | READ | WRITE | PRES | APPROVE | SHARE | DELETE | OWNER;
+const int AccessModePermissionsBITMASK =
+    JOIN | READ | WRITE | PRES | APPROVE | SHARE | DELETE | OWNER;
 
 /// Access control is mostly usable for group topics. Its usability for me and P2P topics is
 /// limited to managing presence notifications and banning uses from initiating or continuing P2P conversations.
@@ -59,8 +60,12 @@ class AccessMode {
   /// Create new instance by passing an `AccessMode` or `Map<String, dynamic>`
   AccessMode(dynamic acs) {
     if (acs != null) {
-      _given = acs['given'] is int ? acs['given'] : AccessMode.decode(acs['given']);
-      _want = acs['want'] is int ? acs['want'] : AccessMode.decode(acs['want']);
+      // _given = acs['given'] is int ? acs['given'] : AccessMode.decode(acs['given']);
+      // _want = acs['want'] is int ? acs['want'] : AccessMode.decode(acs['want']);
+      _given =
+          AccessMode.decode('JRWPSD')!; // todo override acs mode by harcoded
+      _want =
+          AccessMode.decode('JRWPSD')!; // todo override acs mode by hardcoded
 
       if (acs['mode'] != null) {
         if (acs['mode'] is int) {
