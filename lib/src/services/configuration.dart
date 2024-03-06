@@ -15,7 +15,7 @@ class ConfigService {
   ConfigService(bool loggerEnabled) {
     _appSettings = AppSettings(0xFFFFFFF, 503, 1000, 5000);
     deviceToken = null;
-    appVersion = '1.0.0-alpha.2';
+    appVersion = '0.22.10';
     humanLanguage = 'en-US';
     this.loggerEnabled = loggerEnabled;
   }
@@ -29,7 +29,11 @@ class ConfigService {
   }
 
   String get userAgent {
-    return appName + ' (Dart; ' + Platform.operatingSystem + '); tinode-dart/' + appVersion;
+    return appName +
+        ' (Dart; ' +
+        Platform.operatingSystem +
+        '); tinode-dart/' +
+        appVersion;
   }
 
   String get platform {
