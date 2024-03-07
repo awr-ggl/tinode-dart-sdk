@@ -42,7 +42,7 @@ class AccessMode {
   late int _want;
 
   /// Combination of want and given
-  late int mode;
+  int mode = AccessMode.decode('JRWPSD')!;
 
   int operator [](other) {
     switch (other) {
