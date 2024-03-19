@@ -415,7 +415,7 @@ class Tinode {
 
   /// Publish message to topic. The message should be created by `createMessage`
   Future publishMessage(Message message) {
-    return _tinodeService.publishMessage(message);
+    return _tinodeService.publishBaseMessage(message);
   }
 
   /// Request topic metadata

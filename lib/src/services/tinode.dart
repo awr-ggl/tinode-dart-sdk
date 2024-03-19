@@ -339,7 +339,7 @@ class TinodeService {
   }
 
   /// Publish message to topic. The message should be created by `createMessage`
-  Future publishMessage(Message message) {
+  Future publishBaseMessage(Message message) {
     message.resetLocalValues();
     return _send(message.asPubPacket());
   }

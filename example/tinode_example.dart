@@ -42,8 +42,8 @@ void main(List<String> args) async {
           .withLaterData(null)
           .build(),
       null);
-  // var msg = grp.createMessage('This is cool', false);
-  // await grp.publishMessage(msg);
+  var msg = grp.createMessage('This is cool', false);
+  await grp.publishMessage(msg);
 }
 
 // MR Frendhi Experiment => use chain flow from start and same grp topic
