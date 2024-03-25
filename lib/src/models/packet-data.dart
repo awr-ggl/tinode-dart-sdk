@@ -223,10 +223,17 @@ class NotePacketData extends PacketData {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'topic': topic,
-      'what': what,
-      'seq': seq,
-    };
+    if (seq != null) {
+      return {
+        'topic': topic,
+        'what': what,
+        'seq': seq,
+      };
+    } else {
+      return {
+        'topic': topic,
+        'what': what,
+      };
+    }
   }
 }

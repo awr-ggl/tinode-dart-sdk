@@ -445,9 +445,11 @@ class TinodeService {
   }
 
   /// Notify server that a message or messages were read or received. Does NOT return promise
-  Future note(String topicName, String what, int seq) {
-    if (seq <= 0 || seq >= _configService.appSettings.localSeqId) {
-      throw Exception('Invalid message id ' + seq.toString());
+  Future note(String topicName, String what, int? seq) {
+    if (seq != null) {
+      if (seq <= 0 || seq >= _configService.appSettings.localSeqId) {
+        throw Exception('Invalid message id ' + seq.toString());
+      }
     }
 
     var packet = _packetGenerator.generate(packet_types.Note, topicName);
