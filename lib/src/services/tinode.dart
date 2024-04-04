@@ -410,6 +410,7 @@ class TinodeService {
     packet.data = data;
     var ctrl = await _send(packet);
     _cacheManager.delete('topic', topicName);
+    _cacheManager.delete('topic', 'me');
     return ctrl;
   }
 
