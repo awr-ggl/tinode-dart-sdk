@@ -1,3 +1,5 @@
+// ignore_for_file: null_argument_to_non_null_type
+
 import 'package:rxdart/rxdart.dart';
 import 'package:get_it/get_it.dart';
 

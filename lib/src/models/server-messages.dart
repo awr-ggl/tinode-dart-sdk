@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, unnecessary_question_mark
+
 import 'package:tinode/src/models/topic-subscription.dart';
 import 'package:tinode/src/models/delete-transaction.dart';
 import 'package:tinode/src/models/topic-description.dart';
