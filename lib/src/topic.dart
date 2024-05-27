@@ -254,7 +254,7 @@ class Topic {
     message.setStatus(message_status.SENDING);
 
     try {
-      var response = await _tinodeService.publishBaseMessage(message);
+      var response = await _tinodeService.publishMessage(message);
       CtrlMessage? ctrl;
       if (response is CtrlMessage) {
         ctrl = response;

@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tinode/src/models/message-drafty.dart';
 
 import 'package:tinode/src/models/topic-names.dart' as topic_names;
 import 'package:tinode/src/models/server-configuration.dart';
@@ -408,14 +409,24 @@ class Tinode {
     return _tinodeService.leave(topicName, unsubscribe);
   }
 
-  /// Create message draft without sending it to the server
+  /// Create message draft without sending it to the server (base type = text or json stringify)
   Message createMessage(String topicName, dynamic data, bool echo) {
     return _tinodeService.createMessage(topicName, data, echo);
   }
 
+  /// Create message draft without sending it to the server (drafty type)
+  MessageDraftyReply createMessageDrafty(
+      String topicName, dynamic head, dynamic data, bool echo) {
+    return _tinodeService.createMessageDrafty(topicName, head, data, echo);
+  }
+
   /// Publish message to topic. The message should be created by `createMessage`
-  Future publishMessage(Message message) {
-    return _tinodeService.publishBaseMessage(message);
+  Future publishBaseMessage(Message message) {
+    return _tinodeService.publishMessage(message);
+  }
+
+  Future publishDraftyMessage(MessageDraftyReply message) {
+    return _tinodeService.publishMessageDrafty(message);
   }
 
   /// Request topic metadata

@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tinode/src/models/message-drafty.dart';
 
 import 'package:tinode/src/models/packet-types.dart' as packet_types;
 import 'package:tinode/src/models/topic-names.dart' as topic_names;
@@ -340,8 +341,20 @@ class TinodeService {
     return Message(topicName, data, echo);
   }
 
+  /// Create message draft without sending it to the server
+  MessageDraftyReply createMessageDrafty(
+      String topicName, dynamic head, dynamic data, bool? echo) {
+    echo ??= true;
+    return MessageDraftyReply(topicName, head, data, echo);
+  }
+
   /// Publish message to topic. The message should be created by `createMessage`
-  Future publishBaseMessage(Message message) {
+  Future publishMessage(Message message) {
+    message.resetLocalValues();
+    return _send(message.asPubPacket());
+  }
+
+  Future publishMessageDrafty(MessageDraftyReply message) {
     message.resetLocalValues();
     return _send(message.asPubPacket());
   }
