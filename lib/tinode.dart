@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tinode/src/models/message-drafty.dart';
 
 import 'package:tinode/src/models/topic-names.dart' as topic_names;
 import 'package:tinode/src/models/server-configuration.dart';
@@ -100,8 +101,23 @@ class Tinode {
   /// `onMessage` event will be triggered when a message is received
   PublishSubject<ServerMessage> onMessage = PublishSubject<ServerMessage>();
 
-  /// `onRawMessage` event will be triggered when a message is received value will be a json
-  PublishSubject<String> onRawMessage = PublishSubject<String>();
+  /// `onRawResponse` event will be triggered when a message is received value will be a json
+  PublishSubject<String> onRawResponse = PublishSubject<String>();
+
+  /// on raw data
+  PublishSubject<String> onRawData = PublishSubject<String>();
+
+  /// on raw ctrl
+  PublishSubject<String> onRawCtrl = PublishSubject<String>();
+
+  /// on raw pres
+  PublishSubject<String> onRawPres = PublishSubject<String>();
+
+  /// on raw info
+  PublishSubject<String> onRawInfo = PublishSubject<String>();
+
+  /// on raw meta
+  PublishSubject<String> onRawMeta = PublishSubject<String>();
 
   /// Creates an instance of Tinode interface to interact with tinode server using websocket
   ///
@@ -193,8 +209,28 @@ class Tinode {
     }
     _loggerService.log('in: ' + input);
 
-    // Send raw message to listener
-    onRawMessage.add(input);
+    // Send raw response to listener
+    onRawResponse.add(input);
+
+    // TODO BEGINNING CUSTOM LISTENER
+    try {
+      var responseWSTinode = jsonDecode(input);
+      // Send raw response type data to listener
+      if (responseWSTinode['data'] != null) {
+        onRawData.add(input);
+      } else if (responseWSTinode['meta'] != null) {
+        onRawMeta.add(input);
+      } else if (responseWSTinode['ctrl'] != null) {
+        onRawCtrl.add(input);
+      } else if (responseWSTinode['pres'] != null) {
+        onRawPres.add(input);
+      } else if (responseWSTinode['info'] != null) {
+        onRawInfo.add(input);
+      }
+    } catch (e) {
+      print(
+          'ERROR ON DECODE DATA STRING TO JSON FROM TINODE SERVER RESPONSE - ${e.toString()}');
+    }
 
     if (input == '0') {
       onNetworkProbe.add(null);
@@ -373,14 +409,24 @@ class Tinode {
     return _tinodeService.leave(topicName, unsubscribe);
   }
 
-  /// Create message draft without sending it to the server
+  /// Create message draft without sending it to the server (base type = text or json stringify)
   Message createMessage(String topicName, dynamic data, bool echo) {
     return _tinodeService.createMessage(topicName, data, echo);
   }
 
+  /// Create message draft without sending it to the server (drafty type)
+  MessageDraftyReply createMessageDrafty(
+      String topicName, dynamic head, dynamic data, bool echo) {
+    return _tinodeService.createMessageDrafty(topicName, head, data, echo);
+  }
+
   /// Publish message to topic. The message should be created by `createMessage`
-  Future publishMessage(Message message) {
+  Future publishBaseMessage(Message message) {
     return _tinodeService.publishMessage(message);
+  }
+
+  Future publishDraftyMessage(MessageDraftyReply message) {
+    return _tinodeService.publishMessageDrafty(message);
   }
 
   /// Request topic metadata
@@ -421,7 +467,7 @@ class Tinode {
   }
 
   /// Notify server that a message or messages were read or received. Does NOT return promise
-  void note(String topicName, String what, int seq) {
+  void note(String topicName, String what, int? seq) {
     _tinodeService.note(topicName, what, seq);
   }
 
