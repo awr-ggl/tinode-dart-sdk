@@ -58,7 +58,6 @@ class PacketGenerator {
       case packet_types.Leave:
         packetData = LeavePacketData(
           topic: topicName,
-          unsub: false,
         );
         break;
 
@@ -115,6 +114,7 @@ class PacketGenerator {
         packetData = null as dynamic;
     }
 
-    return Packet(type, packetData, Tools.getNextUniqueId());
+    return Packet(type, packetData,
+        packetData is NotePacketData ? null : Tools.getNextUniqueId());
   }
 }

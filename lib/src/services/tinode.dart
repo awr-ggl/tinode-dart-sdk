@@ -1,7 +1,10 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tinode/src/models/message-drafty.dart';
 
 import 'package:tinode/src/models/packet-types.dart' as packet_types;
 import 'package:tinode/src/models/topic-names.dart' as topic_names;
@@ -151,7 +154,9 @@ class TinodeService {
 
     onPresMessage.add(pres);
 
-    Topic? topic = pres.topic != null ? _cacheManager.get('topic', pres.topic ?? '') : null;
+    Topic? topic = pres.topic != null
+        ? _cacheManager.get('topic', pres.topic ?? '')
+        : null;
     if (topic != null) {
       topic.routePres(pres);
     }
@@ -178,8 +183,11 @@ class TinodeService {
     }
     var formattedPkt = pkt.toMap();
     formattedPkt['id'] = pkt.id;
+    // formattedPkt['id'] = 'arisqi-formmac-1726';
     formattedPkt.keys
-        .where((k) => formattedPkt[k] == null || (formattedPkt[k] is Map && formattedPkt[k].isEmpty))
+        .where((k) =>
+            formattedPkt[k] == null ||
+            (formattedPkt[k] is Map && formattedPkt[k].isEmpty))
         .toList()
         .forEach(formattedPkt.remove);
 
@@ -190,7 +198,8 @@ class TinodeService {
     } catch (e) {
       if (pkt.id != null) {
         _loggerService.error(e.toString());
-        _futureManager.execFuture(pkt.id, _configService.appSettings.networkError, null, 'Error');
+        _futureManager.execFuture(
+            pkt.id, _configService.appSettings.networkError, null, 'Error');
       } else {
         rethrow;
       }
@@ -209,7 +218,8 @@ class TinodeService {
   }
 
   /// Create or update an account
-  Future account(String userId, String scheme, String secret, bool login, AccountParams? params) {
+  Future account(String userId, String scheme, String secret, bool login,
+      AccountParams? params) {
     Packet? packet = _packetGenerator.generate(packet_types.Acc, null);
     var data = packet.data as AccPacketData;
     data.user = userId;
@@ -232,7 +242,8 @@ class TinodeService {
   }
 
   /// Authenticate current session
-  Future<CtrlMessage> login(String scheme, String secret, Map<String, dynamic>? cred) async {
+  Future<CtrlMessage> login(
+      String scheme, String secret, Map<String, dynamic>? cred) async {
     var packet = _packetGenerator.generate(packet_types.Login, null);
     var data = packet.data as LoginPacketData;
     data.scheme = scheme;
@@ -247,7 +258,8 @@ class TinodeService {
   }
 
   /// Send a topic subscription request
-  Future subscribe(String? topicName, GetQuery getParams, SetParams? setParams) {
+  Future subscribe(
+      String? topicName, GetQuery getParams, SetParams? setParams) {
     var packet = _packetGenerator.generate(packet_types.Sub, topicName);
     var data = packet.data as SubPacketData;
 
@@ -266,7 +278,8 @@ class TinodeService {
         if (Tools.isNewGroupTopicName(topicName)) {
           // Full set.desc params are used for new topics only
           data.set?.desc = setParams.desc;
-        } else if (Tools.isP2PTopicName(topicName) && setParams.desc?.defacs != null) {
+        } else if (Tools.isP2PTopicName(topicName) &&
+            setParams.desc?.defacs != null) {
           // Use optional default permissions only.
           data.set?.desc = TopicDescription(defacs: setParams.desc?.defacs);
         }
@@ -314,7 +327,8 @@ class TinodeService {
   }
 
   String newGroupTopicName(bool isChan) {
-    return (isChan ? topic_names.TOPIC_NEW_CHAN : topic_names.TOPIC_NEW) + Tools.getNextUniqueId();
+    return (isChan ? topic_names.TOPIC_NEW_CHAN : topic_names.TOPIC_NEW) +
+        Tools.getNextUniqueId();
   }
 
   Topic newTopicWith(String peerUserId) {
@@ -327,8 +341,20 @@ class TinodeService {
     return Message(topicName, data, echo);
   }
 
+  /// Create message draft without sending it to the server
+  MessageDraftyReply createMessageDrafty(
+      String topicName, dynamic head, dynamic data, bool? echo) {
+    echo ??= true;
+    return MessageDraftyReply(topicName, head, data, echo);
+  }
+
   /// Publish message to topic. The message should be created by `createMessage`
   Future publishMessage(Message message) {
+    message.resetLocalValues();
+    return _send(message.asPubPacket());
+  }
+
+  Future publishMessageDrafty(MessageDraftyReply message) {
     message.resetLocalValues();
     return _send(message.asPubPacket());
   }
@@ -399,6 +425,7 @@ class TinodeService {
     packet.data = data;
     var ctrl = await _send(packet);
     _cacheManager.delete('topic', topicName);
+    _cacheManager.delete('topic', 'me');
     return ctrl;
   }
 
@@ -414,7 +441,8 @@ class TinodeService {
 
   /// Delete credential. Always sent on 'me' topic
   Future deleteCredential(String method, String value) {
-    var packet = _packetGenerator.generate(packet_types.Del, topic_names.TOPIC_ME);
+    var packet =
+        _packetGenerator.generate(packet_types.Del, topic_names.TOPIC_ME);
     var data = packet.data as DelPacketData;
     data.what = 'cred';
     data.cred = {'meth': method, 'val': value};
@@ -433,9 +461,11 @@ class TinodeService {
   }
 
   /// Notify server that a message or messages were read or received. Does NOT return promise
-  Future note(String topicName, String what, int seq) {
-    if (seq <= 0 || seq >= _configService.appSettings.localSeqId) {
-      throw Exception('Invalid message id ' + seq.toString());
+  Future note(String topicName, String what, int? seq) {
+    if (seq != null) {
+      if (seq <= 0 || seq >= _configService.appSettings.localSeqId) {
+        throw Exception('Invalid message id ' + seq.toString());
+      }
     }
 
     var packet = _packetGenerator.generate(packet_types.Note, topicName);
