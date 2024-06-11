@@ -10,10 +10,6 @@ class DelRange {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'low': low,
-      'hi': hi,
-      'all': all
-    };
+    return {'low': low, 'hi': hi, 'all': all};
   }
 }

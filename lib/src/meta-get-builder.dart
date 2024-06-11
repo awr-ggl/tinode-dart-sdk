@@ -110,7 +110,8 @@ class MetaGetBuilder {
     if (topic.getType() == 'me') {
       what['cred'] = true;
     } else {
-      _loggerService.error('Invalid topic type for MetaGetBuilder:withCreds ' + topic.getType().toString());
+      _loggerService.error('Invalid topic type for MetaGetBuilder:withCreds ' +
+          topic.getType().toString());
     }
     return this;
   }
