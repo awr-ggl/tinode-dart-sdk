@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_type_check
+
 /// This numeric value represents `N` or `n` access mode flag.
 const int NONE = 0x00;
 

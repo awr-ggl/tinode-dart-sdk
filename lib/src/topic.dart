@@ -1,4 +1,4 @@
-// ignore_for_file: null_argument_to_non_null_type
+// ignore_for_file: null_argument_to_non_null_type, dead_code
 
 import 'package:rxdart/rxdart.dart';
 import 'package:get_it/get_it.dart';
