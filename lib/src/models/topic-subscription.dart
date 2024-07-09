@@ -17,6 +17,13 @@ class Seen {
       when: msg['when'] != null ? DateTime.parse(msg['when']) : DateTime.now(),
     );
   }
+
+  Map<String, dynamic> jsonHelper() {
+    return {
+      'when': when?.toIso8601String(),
+      'ua': ua,
+    };
+  }
 }
 
 /// Topic subscriber
@@ -163,5 +170,34 @@ class TopicSubscription {
       touched: touched,
       updated: updated,
     );
+  }
+
+  Map<String, dynamic> jsonHelper() {
+    Map<String, dynamic> jsonMap = {
+      'user': user,
+      'updated': updated?.toIso8601String(),
+      'touched': touched?.toIso8601String(),
+      'deleted': deleted?.toIso8601String(),
+      'created': created?.toIso8601String(),
+      'acs': acs?.jsonHelper(),
+      'read': read,
+      'recv': recv,
+      'clear': clear,
+      'public': public,
+      'private': private,
+      'online': online,
+      'topic': topic,
+      'seq': seq,
+      'noForwarding': noForwarding,
+      'mode': mode,
+      'unread': unread,
+    };
+
+    // Optionally skip null values
+    jsonMap.removeWhere((key, value) => value == null);
+
+    // Convert any nested objects with `jsonHelper` method recursively
+
+    return jsonMap;
   }
 }

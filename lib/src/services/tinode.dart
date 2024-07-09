@@ -386,7 +386,11 @@ class TinodeService {
       }
       if (params.sub != null) {
         what.add('sub');
-        data.sub = params.sub;
+        if (params.sub!.mode != null && params.sub!.mode!.isNotEmpty) {
+          data.sub = params.sub?.jsonHelper();
+        } else {
+          data.sub = params.sub;
+        }
       }
       if (params.tags != null) {
         what.add('tags');
